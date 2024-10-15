@@ -14,6 +14,19 @@ GROUP BY customer_id;
 
 SELECT * FROM rental_summary;
 # CREATE CTE
+
+
+
+with payment_summary as (
+SELECT customer_id, SUM(payment.amount) AS total_paid
+FROM rental_summary
+INNER JOIN payment
+USING (customer_id)
+GROUP BY customer_id)
+SELECT * FROM payment_summary;
+
+# Challenge 3
+
 with payment_summary as (
 SELECT customer_id, SUM(payment.amount) AS total_paid
 FROM rental_summary
@@ -23,7 +36,7 @@ GROUP BY customer_id),
 
 
 
--- Step 3: Create a CTE to join the rental summary view with the payment summary CTE
+
 customer_summary AS (
     SELECT 
         rs.customer_id,
@@ -37,7 +50,6 @@ customer_summary AS (
     INNER JOIN payment_summary ON rs.customer_id = payment_summary.customer_id
 )
 
--- Step 4: Generate the final customer summary report
 SELECT 
     first_name,
     last_name,
